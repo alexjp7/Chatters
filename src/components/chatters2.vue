@@ -40,8 +40,12 @@
       <v-textarea ref="promptField" label="Prompt" @keyup.enter="onSubmit"></v-textarea>
       <v-btn icon="mdi-send" size="x-large" color="blue" @click="onSubmit"></v-btn>
     </div>
-    <v-switch v-model="serviceSwitch" :label="`Switch: ${serviceSwitch}`" false-value="ERM"
-      true-value="AI Service"></v-switch>
+    <v-switch
+      v-model="serviceSwitch"
+      :label="`Switch: ${serviceSwitch}`"
+      false-value="ERM"
+      true-value="AI Service"
+    ></v-switch>
 
   </v-footer>
 
@@ -144,7 +148,7 @@ export default {
     },
     async fetchStreamedResponse(prompt) {
 
-      var request = new AgentRequest(prompt, "HICRJN5VKM", "8WEVCCHTM1", "12313asdsada");
+    var request = new AgentRequest(prompt, "HICRJN5VKM", "8WEVCCHTM1", "12313asdsada");
 
       const formData = new FormData();
       // formData.append('file', fileInput.files[0]);
@@ -154,33 +158,27 @@ export default {
 
 
       if (this.files !== undefined && this.files.length > 0) {
-        for (let i = 0; i < this.files.length; i++) {
+        for (let i = 0; i < this.files.length; i++) 
+        {
           formData.append('files', this.files[i]);
         }
+
       }
 
       const myHeaders = new Headers();
-
-      if (this.serviceSwitch === "ERM") {
-        myHeaders.append("Accept", "application/json");
-        myHeaders.append("Content-Type", "application/json");
-        myHeaders.append("Authorization", 'Basic cHJvdGVjaHQuc3VwcG9ydDppTUFpSkx2YU1FamlxckNUTkhTR1hPVDZuK2xaVno2VDJ2VzdBMGhsTmtpRmVyM2p0dE1SdVh2SGV6TzlJaDhq');
-
-      } else {
-        myHeaders.append("Accept", "application/json");
-      }
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("Authorization",'Basic cHJvdGVjaHQuc3VwcG9ydDppTUFpSkx2YU1FamlxckNUTkhTR1hPVDZuK2xaVno2VDJ2VzdBMGhsTmtpRmVyM2p0dE1SdVh2SGV6TzlJaDhq');
 
       console.log("Service switch: " + this.serviceSwitch);
-      console.log("headers: ", myHeaders);
 
-      const requestBody = this.serviceSwitch === "ERM"
-        ? JSON.stringify({ "prompt": prompt })
+      const requestBody  =  this.serviceSwitch === "ERM"
+      ? JSON.stringify({ "prompt": prompt})
         : formData;
 
 
-      const requestUri = this.serviceSwitch === "ERM"
-        ? "/api/camilla/rest/api/copilot/chat/stream"
-        : "/api/erm-ai/rest/v1/api/chatbot/agent/stream";
+      const requestUri = this.serviceSwitch === "ERM" 
+      ? "/api/camilla/rest/api/copilot/chat/stream" 
+      : "/api/erm-ai/rest/v1/api/chatbot/agent/stream";
 
       const response = await fetch(requestUri, {
         method: 'POST',
